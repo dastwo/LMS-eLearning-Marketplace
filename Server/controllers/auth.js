@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken')
 const User = require('../models/user')
 const {hashPassword, comparePassword} = require('../utils/auth')
 
@@ -17,7 +18,7 @@ const {hashPassword, comparePassword} = require('../utils/auth')
         const user  = User({
             name, 
             email,
-            password
+            password: hashedPassword
         })
         await user.save()
         return res.status(200).json({ ok: true, message:'user saved'})
@@ -29,10 +30,31 @@ const {hashPassword, comparePassword} = require('../utils/auth')
 
 const login = async (req, res)=>{
     try {
-        
+        const {email, password} = req.body
+        const user = await User.findOne({email})
+        if(!user) return res.status(400).json('User not exists')
+        const checkPassword = await comparePassword(password, user.password)
+        if(!checkPassword) return res.status(400).json('Password error try agin')
+        const token = jwt.sign({id: user._id},process.env.SECRET_JWT, {
+            expiresIn: '7d'
+        })
+        user.password = undefined
+        res.cookie('token', token, {
+            httpOnly: true,
+            // secure: true
+        })
+        res.status(200).json(user)
     } catch (error) {
        return res.status(500).json({message: error.message})
     }
 }
 
-module.exports = {register, login}
+const logout = async (req, res)=>{
+    try {
+        res.clearCookie('token');
+        return res.status(200).json({message: 'Logout success'})
+    } catch (error) {
+        return res.status(400).json(error.message)
+    }
+}
+module.exports = {register, login, logout}

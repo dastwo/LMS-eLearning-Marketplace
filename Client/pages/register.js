@@ -2,6 +2,7 @@ import { useState } from "react"
 import axios from "axios"
 import { toast } from "react-toastify"
 import { SyncOutlined } from "@ant-design/icons"
+import Link from "next/link"
 
 const Register = () => {
   const [user, setUser] = useState({name:'', email:'', password:''})
@@ -38,6 +39,7 @@ const Register = () => {
         <input type='password' onChange={handleInputChange} placeholder='Enter your password' className="form-control mb-4 p-4" name="password" required/>
         <button type="submit" className="btn btn-block btn-primary" disabled={!user.name || !user.email || !user.password || login}>{login ? <SyncOutlined spin/> : 'Submit'}</button>
       </form>
+      <p className="text-center">Already register? {' '} <Link href={'/login'}>Login</Link> </p>
     </div>
     </>
   )
