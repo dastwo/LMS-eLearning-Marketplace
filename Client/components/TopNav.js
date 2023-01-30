@@ -6,7 +6,7 @@ import { useContext, useEffect, useState } from 'react'
 import { Context } from "../context";
 import {useRouter} from 'next/router';
 import { toast } from "react-toastify";
-const {Item, SubMenu} = Menu
+const {Item, SubMenu, ItemGroup} = Menu
 const TopNav = () => {
   const [current, setCurrent] = useState('')
   const router = useRouter()
@@ -53,11 +53,19 @@ const TopNav = () => {
     )}
 
    {user !== null && (
-    <SubMenu icon={<CoffeeOutlined/>} title={user && user.name} className='float-right'>
-      <Item onClick={logout}className='float-right'>
+    <SubMenu key={'SubMenu'} icon={<CoffeeOutlined/>} title={user && user.name} className='float-right'>
+      <ItemGroup>
+      <Item key={'/user'} className=''>
+        <Link href='/user'>
+        Dashboard
+        </Link>
+      </Item>
+      <Item  onClick={logout}className=''>
         Logout
 
       </Item>
+      </ItemGroup>
+      
     </SubMenu>
    )}
 

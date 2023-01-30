@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { SyncOutlined } from "@ant-design/icons";
@@ -10,7 +10,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [login, setLogin] = useState(false);
 
-  const { state, dispatch } = useContext(Context);
+  const { state:{user}, dispatch } = useContext(Context);
 
   const router = useRouter()
   const handleSubmit = async (e) => {
@@ -28,10 +28,14 @@ const Login = () => {
       router.push('/')
     } catch (err) {
       console.log(err);
-      toast.error(err.response.data.message);
+      toast.error(err.response.data);
       setLogin(false);
     }
   };
+
+  useEffect(()=>{
+    if(user !== null) router.push('/')
+  },[user])
 
   return (
     <>
@@ -65,6 +69,9 @@ const Login = () => {
         </form>
         <p className="text-center">
           Not register? <Link href={"/register"}>Register</Link>{" "}
+        </p>
+        <p className="text-center ">
+          <Link className="text-danger" href={"/forget-password"}>Forget password</Link>{" "}
         </p>
       </div>
     </>

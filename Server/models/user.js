@@ -31,7 +31,11 @@ const userSchema = new Schema({
     },
     stripe_account_id:'',
     stripe_seller:{},
-    stripeSession:{}
+    stripeSession:{},
+    passwordResetCode:{
+        type: String,
+        default:''
+    }
 }, {timestamps: true, })
 
 module.exports = mongoose.model('User', userSchema) 
