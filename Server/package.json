@@ -22,6 +22,9 @@
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^6.8.4",
     "morgan": "^1.10.0",
-    "nanoid": "^2.1.11"
+    "nanoid": "^2.1.11",
+    "node-fetch": "^2.6.1",
+    "query-string": "^8.1.0",
+    "stripe": "^11.8.0"
   }
 }

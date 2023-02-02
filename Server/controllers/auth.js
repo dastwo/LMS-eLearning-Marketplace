@@ -73,7 +73,6 @@ const logout = async (req, res) => {
 
 const currentUser = async (req, res) => {
   try {
-    console.log(req.auth);
     const user = await User.findById(req.auth.id).select("-password").exec();
     console.log("CURRENT_USER", user);
     return res.status(200).json({ ok: true });

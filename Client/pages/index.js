@@ -1,9 +1,9 @@
-
-export default function index() {
+const index = () => {
   return (
     <>
-    <h5 className='bg-black square jumbotron text-center'></h5>
-    <p>Home</p>
+      <h1 className="text-center">Home</h1>
     </>
-  )
-}
+  );
+};
+
+export default index;

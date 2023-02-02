@@ -43,6 +43,7 @@ const Provider = ({ children }) => {
             .then((data) => {
               console.log("/401 error > logout");
               localStorage.removeItem("user");
+              dispatch({type:'LOGOUT'})
               router.push("/login");
             })
             .catch((err) => {

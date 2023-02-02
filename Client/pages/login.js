@@ -4,15 +4,18 @@ import { toast } from "react-toastify";
 import { SyncOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import { Context } from "../context";
-import {useRouter} from 'next/router'
+import { useRouter } from "next/router";
 const Login = () => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [login, setLogin] = useState(false);
 
-  const { state:{user}, dispatch } = useContext(Context);
+  const {
+    state: { user },
+    dispatch,
+  } = useContext(Context);
 
-  const router = useRouter()
+  const router = useRouter();
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -23,9 +26,9 @@ const Login = () => {
         type: "LOGIN",
         payload: data,
       });
-      localStorage.setItem('user', JSON.stringify(data))
+      localStorage.setItem("user", JSON.stringify(data));
       setLogin(false);
-      router.push('/')
+      router.push("/user");
     } catch (err) {
       console.log(err);
       toast.error(err.response.data);
@@ -33,13 +36,13 @@ const Login = () => {
     }
   };
 
-  useEffect(()=>{
-    if(user !== null) router.push('/')
-  },[user])
+  useEffect(() => {
+    if (user !== null) router.push("/");
+  }, [user]);
 
   return (
     <>
-      <h1>Login</h1>.
+      <h1 className="text-center">Login</h1>.
       <div className="container col-md-4 offset-md-4">
         <form onSubmit={handleSubmit}>
           <input
@@ -71,7 +74,9 @@ const Login = () => {
           Not register? <Link href={"/register"}>Register</Link>{" "}
         </p>
         <p className="text-center ">
-          <Link className="text-danger" href={"/forget-password"}>Forget password</Link>{" "}
+          <Link className="text-danger" href={"/forget-password"}>
+            Forget password
+          </Link>{" "}
         </p>
       </div>
     </>
