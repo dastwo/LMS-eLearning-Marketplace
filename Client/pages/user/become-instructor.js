@@ -16,11 +16,10 @@ const BecomeInstructor = () => {
       setLoading(true)
       const {data} = await axios.post('/api/make-instructor')
       console.log(data);
-      // window.location.href = data
+      window.location.href = data
       setLoading(false)
     } catch (err) {
       setLoading(false)
-      tost(err)
       console.log('becomeInstructor ERROR', err);
     }
   }

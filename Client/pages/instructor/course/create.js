@@ -1,9 +1,10 @@
+import InstructorRoute from "../../../components/routers/InstructorRoute"
 
 const CourseCreate = () => {
   return (
-    <>
-    <h1>Course Create</h1>
-    </>
+    <InstructorRoute>
+    <h1 className='text-center'>Course Create</h1>
+    </InstructorRoute>
   )
 }
 
