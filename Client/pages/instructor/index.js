@@ -1,5 +1,5 @@
 import React from 'react'
-import InstructorRoute from '../../components/routers/InstructorRoute'
+import InstructorRoute from '../../components/routes/InstructorRoute'
 
 const Instructor = () => {
   return (

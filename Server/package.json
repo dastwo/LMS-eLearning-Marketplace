@@ -12,6 +12,7 @@
   "dependencies": {
     "aws-sdk": "^2.1301.0",
     "bcrypt": "^5.1.0",
+    "buffer": "^6.0.3",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "csurf": "^1.11.0",
@@ -25,6 +26,7 @@
     "nanoid": "^2.1.11",
     "node-fetch": "^2.6.1",
     "query-string": "^8.1.0",
+    "slugify": "^1.6.5",
     "stripe": "^11.8.0"
   }
 }

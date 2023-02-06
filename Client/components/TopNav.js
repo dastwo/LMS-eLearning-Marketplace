@@ -37,7 +37,7 @@ const TopNav = () => {
     </Item>
     {user && user.role && user.role.includes('Instructor') ? <Item key='/instructor/course/create' onClick={(e)=> setCurrent(e.key)} icon={<CarryOutFilled /> }>
         <Link href='/instructor/course/create'>
-        Instructor
+        Course Create
         </Link>
     </Item> :
      <Item key='/user/become-instructor' onClick={(e)=> setCurrent(e.key)} icon={<TeamOutlined /> }>
@@ -61,8 +61,16 @@ const TopNav = () => {
       </>
     )}
 
+{user && user.role && user.role.includes('Instructor') && 
+<Item key='/instructor'  onClick={(e)=> setCurrent(e.key)} icon={<CarryOutFilled /> }>
+        <Link href='/instructor'>
+        instructor
+        </Link>
+    </Item>
+     }
+
    {user !== null && (
-    <SubMenu key={'SubMenu'} icon={<CoffeeOutlined/>} title={user && user.name} className='float-right'>
+    <SubMenu key={'SubMenu'} icon={<CoffeeOutlined/>} title={user && user.name} className=''>
       <ItemGroup>
       <Item key={'/user'} className=''>
         <Link href='/user'>

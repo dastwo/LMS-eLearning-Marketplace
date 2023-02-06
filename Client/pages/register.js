@@ -31,7 +31,7 @@ const Register = () => {
       setEmail("");
       setName("");
       setPassword("");
-      router('/login')
+      router.push('/login')
     } catch (err) {
       console.log(err);
       toast.error(err.response.data.message);

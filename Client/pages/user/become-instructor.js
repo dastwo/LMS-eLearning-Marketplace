@@ -5,7 +5,7 @@ import Link from 'next/link'
 import {Button} from 'antd'
 import {SettingOutlined, UserSwitchOutlined, LoadingOutlined} from '@ant-design/icons'
 import {tost} from 'react-toastify'
-import UserRoute from '../../components/routers/UserRoute'
+import UserRoute from '../../components/routes/UserRoute'
 const BecomeInstructor = () => {
   const [loading, setLoading] = useState(false)
   const {state:{user}} =useContext(Context)
