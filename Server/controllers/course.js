@@ -83,9 +83,18 @@ const createCourse = async (req, res)=>{
   }
 }
 
+const getCourse = async (req, res)=>{
+  try{
+    const course = await Course.findOne({slug: req.params.slug}).populate('instructor', '_id name').exec()
+    res.status(200).json(course)
+  }catch(err){
+    console.log(err);
+  }
+}
 
 module.exports = {
   uploadImage,
   removeImage,
   createCourse,
+  getCourse,
 };

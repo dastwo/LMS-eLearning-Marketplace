@@ -74,6 +74,7 @@ const CourseCreate = () => {
   router.push('/instructor')
   } catch (err) {
     setValues({...values, loading:false})
+    console.log(err);
     toast.error(err.response.data)
   }
 }
