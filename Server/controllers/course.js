@@ -1,4 +1,5 @@
 const AWS = require("aws-sdk");
+const { readFileSync } = require("fs");
 const nanoid = require("nanoid");
 const Buffer = require("buffer").Buffer;
 const  slugify = require('slugify')
@@ -92,9 +93,80 @@ const getCourse = async (req, res)=>{
   }
 }
 
+const uploadVideo = async (req, res)=>{
+  try {
+    const {id} =  req.auth
+    const {instructorId} = req.params
+    if(id != instructorId) return res.status(403).send('Unauthorized')
+    const {video} = req.files
+    if(!video) return res.status(400).send('No video')
+
+    const params = {
+      Bucket:'descdmy-bucket',
+      Key:`${nanoid()}.${video.type.split('/')[1]}`,
+      Body: readFileSync(video.path),
+      ACL:'public-read',
+      ContentType: video.type
+    }
+
+    S3.upload(params, (err, data)=>{
+      if(err){
+        console.log(err);
+        return res.sendStatus(400)
+      }
+      res.status(200).send(data)
+    })
+  } catch (err) {
+    console.log('UPLOAD VIDEO ERR =>', err);
+    return res.status(400).send('Upload video failed')
+  }
+}
+
+const removeVideo = async (req, res)=>{
+  try{
+    const {id} =  req.auth
+    const {instructorId} = req.params
+    if(id != instructorId) return res.status(403).send('Unauthorized')
+
+    const {video} = req.body
+
+    const params = {
+      Bucket: video.Bucket,
+      Key: video.Key
+    }
+    S3.deleteObject(params, (err, data)=>{
+      if(err){
+        return res.sendStatus(400)
+      }
+      return res.status(200).json(data)
+    })
+  }catch(err){
+    console.log('REMOVE VIDEO ==>', err);
+    return res.status(400).send('remove video failed')
+  }
+}
+
+const addLesson = async (req, res)=>{
+  try{
+    const {id} = req.auth
+    const {instructorId, slug} = req.params
+    if(id != instructorId) return res.status(403).send('Unauthorized')
+    const {video, title, content} = req.body
+
+    const UpdateCourseLesson = await Course.findOneAndUpdate({slug}, {$push:{lessons:{video, title, content, slug: slugify(title)}}}, {new: true}).populate('instructor', '_id name').exec()
+    return res.status(200).json(UpdateCourseLesson)
+  }catch(err){
+    console.log('ADD LESSON ERR=>', err);
+    return res.status(400).send('Add lesson failed')
+  }
+}
+
 module.exports = {
   uploadImage,
   removeImage,
   createCourse,
   getCourse,
+  uploadVideo, 
+  removeVideo, 
+  addLesson,
 };
