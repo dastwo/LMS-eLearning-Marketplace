@@ -7,7 +7,7 @@ import { EditOutlined, CheckOutlined, UploadOutlined } from "@ant-design/icons";
 import ReactMarkdown from 'react-markdown'
 import AddLessonForm from "../../../../components/forms/AddLessonForm";
 import {toast} from 'react-toastify'
-import Item from "antd/es/list/Item";
+const {Item} = List;
 
 const CourseView = () => {
   const [course, setCourse] = useState({});
@@ -41,7 +41,7 @@ const CourseView = () => {
       setUploading(true)
       const {data} = await axios.post(`/api/course/lesson/${slug}/${course.instructor && course.instructor._id}`, values)
       setValues({...values, video:{}, content:'', title:''})
-      console.log(data);
+      setCourse(data)
       setVisible(false)
       setUploadButtonText('Upload video')
       toast.success('Lesson added')
@@ -80,7 +80,7 @@ const CourseView = () => {
   const handleVideoRemove = async ()=>{
     try {
       setUploading(true)
-      const {data} = await axios.post(`/api/course/video-remove/${course.instructor && course.instructor._id}`, {video: values.video})
+      const {data} = await axios.post(`/api/course/video-remove/${course.instructor._id}`, {video: values.video})
       toast.success('Video removed success')
       setValues({...values, video: {}})
       setUploading(false)
@@ -116,7 +116,7 @@ const CourseView = () => {
                 </div>
             <div className="d-flex col-md-1 pt-4">
               <Tooltip title="Edit">
-                <EditOutlined  className="text-warning me-3"/>
+                <EditOutlined  className="text-warning me-3" onClick={()=> router.push(`/instructor/course/edit/${slug}`)}/>
               </Tooltip>
               <Tooltip title="Publish">
                 <CheckOutlined  className="text-danger"/>
@@ -136,12 +136,13 @@ const CourseView = () => {
             size="large"
             icon={<UploadOutlined/>}
             shape='round'
+            
             >
-
+Upload lessons
             </Button>
             </div>
             <br/>
-            <Modal title='+ Add lesson' centered visible={visible} onCancel={()=> setVisible(false)}
+            <Modal title='+ Add lesson' centered open={visible} onCancel={()=> setVisible(false)}
             footer={null}
             >
               <AddLessonForm

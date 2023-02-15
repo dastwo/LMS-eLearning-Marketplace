@@ -33,22 +33,31 @@ const AddLessonForm = ({
           placeholder="Content"
         ></textarea>
 
-       <div className="d-flex justify-content-center">
-       <label className="btn btn-dark btn-block text-left mt-3">
-          {uploadButtonText}
-          <input onChange={handleVideo} type="file" accept="video/*" hidden />
-        </label>
-        {!uploading && values.video.Location && (<Tooltip title='Remove'>
-          <span onClick={handleVideoRemove}>
-            <CloseCircleOutlined className="text-danger d-flex justify-content-center pt-4 pointer-event"/>
-          </span>
-        </Tooltip>)}
-       </div>
+        <div className="d-flex justify-content-center">
+          <label className="btn btn-dark btn-block text-left mt-3">
+            {uploadButtonText}
+            <input onChange={handleVideo} type="file" accept="video/*" hidden />
+          </label>
+          {!uploading && values.video.Location && (
+            <Tooltip title="Remove">
+              <span onClick={handleVideoRemove}>
+                <CloseCircleOutlined className="text-danger d-flex justify-content-center pt-4 pointer-event" />
+              </span>
+            </Tooltip>
+          )}
+        </div>
 
-        {progress > 0 && <Progress className="d-flex justify-content-center pt-2" percent={progress} steps={10}/>}
-        <br/>
+        {progress > 0 && (
+          <Progress
+            className="d-flex justify-content-center pt-2"
+            percent={progress}
+            steps={10}
+          />
+        )}
+        <br />
         <Button
-          onClick={handleAddLesson}
+          htmlType="submit"
+          block
           className="col mt-3"
           size="large"
           type="primary"

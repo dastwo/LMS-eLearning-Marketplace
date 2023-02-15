@@ -161,6 +161,65 @@ const addLesson = async (req, res)=>{
   }
 }
 
+const updateCourse = async (req, res)=>{
+  try{
+    const {id} = req.auth
+    const {slug} = req.params
+    const {instructor} = req.body
+  
+    if(id != instructor._id) return res.status(403).send('Unauthorized')
+
+    const updateCourse = await Course.findOneAndUpdate({slug}, {...req.body},{new: true}).populate('instructor', '_id name').exec()
+
+    return res.status(200).json(updateCourse)
+
+  }catch(err){
+    console.log('update Course ==>', err);
+    return res.status(400).send('remove lesson failed')
+  }
+}
+const removeLesson = async (req, res)=>{
+  try{
+    const {id} = req.auth
+    const {slug, lessonsId} = req.params
+
+    const course = await Course.findOne({slug}).exec()
+    if(id != course.instructor._id) return res.status(403).send('Unauthorized')
+
+    const removeLessonCourse = await Course.findOneAndUpdate({slug}, {$pull:{lessons:{_id: lessonsId}}},{new:true}).exec()
+
+    return res.status(200).json({ok: true})
+
+  }catch(err){
+    console.log('remove Lesson ==>', err);
+    return res.status(400).send('Update course failed')
+  }
+}
+
+const updateLesson = async (req, res)=>{
+  try{
+    const {id} = req.auth
+    const {slug, lessonsId} = req.params
+    const {_id, title, content, free_preview, video} = req.body
+
+    const course = await Course.findOne({slug}).exec()
+    if(id != course.instructor._id) return res.status(403).send('Unauthorized')
+
+    const updateLessonCourse = await Course.updateOne({'lessons._id':_id}, {$set:{
+      "lessons.$.title": title,
+      'lessons.$.content': content,
+      "lessons.$.video": video,
+      "lessons.$.free_preview": free_preview
+    }}, {new: true}).exec()
+
+    return res.status(200).json({ok: true})
+
+  }catch(err){
+    console.log('update Lesson ==>', err);
+    return res.status(400).send('Update lesson failed')
+  }
+}
+
 module.exports = {
   uploadImage,
   removeImage,
@@ -169,4 +228,7 @@ module.exports = {
   uploadVideo, 
   removeVideo, 
   addLesson,
+  updateCourse,
+  updateLesson,
+  removeLesson,
 };
