@@ -58,7 +58,11 @@ const courseSchema = new mongoose.Schema({
         ref:'User',
         required: true
     },
-    lessons:[lesseesSchema]
+    lessons:[lesseesSchema],
+    published:{
+        type: Boolean,
+        default: false
+    }
 
 },{timestamps:true})
 

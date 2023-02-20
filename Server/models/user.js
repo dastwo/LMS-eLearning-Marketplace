@@ -1,8 +1,8 @@
 const mongoose = require('mongoose')
 
-const {Schema} = mongoose
+const {ObjectId} = mongoose.SchemaTypes
 
-const userSchema = new Schema({
+const userSchema = new mongoose.Schema({
     name:{
         type:String,
         trim: true,
@@ -35,7 +35,8 @@ const userSchema = new Schema({
     passwordResetCode:{
         type: String,
         default:''
-    }
+    },
+    courses: [{type: ObjectId, ref:'Course'}],
 }, {timestamps: true, })
 
 module.exports = mongoose.model('User', userSchema) 

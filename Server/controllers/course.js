@@ -4,6 +4,8 @@ const nanoid = require("nanoid");
 const Buffer = require("buffer").Buffer;
 const  slugify = require('slugify')
 const Course = require('../models/course')
+const User = require('../models/user')
+const stripe = require('stripe')(process.env.STRIPE_SECRET)
 
 const awsConfig = {
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -220,6 +222,153 @@ const updateLesson = async (req, res)=>{
   }
 }
 
+const publishCourse = async (req, res)=>{
+  try {
+    const {courseId} = req.params;
+    const {id} = req.auth;
+    const course = await Course.findById(courseId)
+    
+    if(id != course.instructor._id){
+      return res.status(403).send('Unauthorized')
+    }
+
+    const update = await Course.findByIdAndUpdate(courseId, {published: true}, {new: true}).exec()
+
+    return res.status(200).json(update)
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send('Publish course failed')
+  }
+}
+const unpublishCourse = async (req, res)=>{
+  try {
+    const {courseId} = req.params;
+    const {id} = req.auth;
+    const course = await Course.findById(courseId)
+    
+    if(id != course.instructor._id){
+      return res.status(403).send('Unauthorized')
+    }
+
+    const update = await Course.findByIdAndUpdate(courseId, {published: false}, {new: true}).exec()
+
+    return res.status(200).json(update)
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send('Unpublish course failed')
+  }
+}
+
+const coursesPublish = async (req, res)=>{
+  try {
+    const allCourses = await Course.find({published: true}).populate('instructor', '_id name').exec()
+    return res.status(200).json(allCourses)
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+const checkEnrollment = async (req, res) =>{
+  try {
+    const {courseId} = req.params
+    console.log(courseId);
+
+    const user = await User.findById(req.auth.id)
+
+    let ids = []
+    let coursesLength = user.courses && user.courses.length
+    for(let i = 0; i < coursesLength; i++){
+      ids.push(user.courses[i].toString())
+    }
+
+    res.json({status:ids.includes(courseId), course: await Course.findById(courseId)})
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send('checkEnrollment failed')
+  }
+}
+
+const freeEnrollment = async (req, res)=>{
+  try {
+    const course = await Course.findById(req.params.courseId).exec()
+    if(course.paid) return
+
+    const result = await User.findByIdAndUpdate(req.auth.id, {
+      $addToSet:{courses: course._id}
+    },{new:true}).exec()
+    return res.status(200).json({message:'Congratulations You have successfully enrolled', course} )
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send('Enrollment create failed')
+  }
+}
+
+const paidEnrollment = async (req, res)=>{
+  try {
+    const course = await Course.findById(req.params.courseId).populate('instructor').exec()
+    if(!course.paid) return
+
+    
+
+    const fee = (course.price * 30) / 100
+
+    const session = await stripe.checkout.sessions.create({
+      mode: 'payment',
+      payment_method_types: ['card'],
+      line_items:[
+        {
+          price_data: {
+            currency: 'usd',
+            unit_amount: Math.round(course.price.toFixed(2) * 100),
+            product_data: {
+              name: course.name,
+            },
+          },
+          quantity: 1,
+        },
+      ],
+      payment_intent_data:{
+        application_fee_amount: Math.round(fee.toFixed(2) * 100),
+        transfer_data: {destination: course.instructor.stripe_account_id},
+      },
+      success_url: `${process.env.STRIPE_SUCCESS_URL}/${course._id}`,
+      cancel_url: process.env.STRIPE_CANCEL_URL,
+    })
+    
+    await User.findByIdAndUpdate(req.auth.id, {stripeSession: session}).exec()
+    res.status(200).send(session.id)
+
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send('Paid enrollment failed')
+  }
+}
+
+const stripeSuccess = async (req, res)=>{
+  try {
+    
+    const course = await Course.findById(req.params.courseId).exec()
+    
+    const user = await User.findById(req.auth.id).exec()
+
+    if(!user.stripeSession.id) return res.sendStatus(400)
+
+    const session = await stripe.checkout.sessions.retrieve(user.stripeSession.id)
+
+    if(session.payment_status === 'paid'){
+      await User.findByIdAndUpdate(user._id, {
+        $addToSet:{courses: course._id},
+        $set:{stripeSession:{}}
+      }, {new: true}).exec()
+
+    }
+    return res.status(200).json({success: true, course})
+  } catch (err) {
+    console.log('STRIPE SUCCESS FAILED');
+    return res.status(400).json({success: false, message:'Paid failed. Try again later'})
+  }
+}
+
 module.exports = {
   uploadImage,
   removeImage,
@@ -231,4 +380,11 @@ module.exports = {
   updateCourse,
   updateLesson,
   removeLesson,
+  unpublishCourse,
+  publishCourse,
+  coursesPublish,
+  checkEnrollment,
+  freeEnrollment,
+  paidEnrollment,
+  stripeSuccess,
 };

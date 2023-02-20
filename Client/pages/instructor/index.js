@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import InstructorRoute from "../../components/routes/InstructorRoute";
-import { Avatar } from "antd";
+import { Avatar, Tooltip } from "antd";
 import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import Link from "next/link";
 const Instructor = () => {
@@ -54,13 +54,13 @@ const Instructor = () => {
                   </div>
                   <div className="col-md-1 pt-2">
                     {course.published ? (
-                      <div>
+                      <Tooltip title='Published'>
                         <CheckCircleOutlined className="text-success h4" />
-                      </div>
+                      </Tooltip>
                     ) : (
-                      <div>
-                        <CloseCircleOutlined className="text-warning h4" />
-                      </div>
+                      <Tooltip>
+                        <CloseCircleOutlined title="Unpublished" className="text-warning h4" />
+                      </Tooltip>
                     )}
                   </div>
               </div>

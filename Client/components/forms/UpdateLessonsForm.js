@@ -57,7 +57,7 @@ const UpdateLessonsForm = ({
         <div className="d-flex justify-content-between"
         >
           <span>preview</span>
-          <Switch className="float-end mt-2" disabled={uploading} defaultChecked={current.free_preview} name='free_preview' onChange={(v)=> setCurrent({...current, free_preview: v})}/>
+          <Switch className="float-end mt-2" disabled={uploading} checked={current.free_preview} name='free_preview' onChange={(v)=> setCurrent({...current, free_preview: v})}/>
         </div>
         <br />
         <Button
