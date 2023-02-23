@@ -30,19 +30,19 @@ Create a .env file in the root of the project and fill in the following variable
 makefile
 Copy code
 MONGODB_URI=<your MongoDB URI>
--JWT_SECRET=<your JWT secret>
--STRIPE_SECRET_KEY=<your Stripe secret key>
--STRIPE_PUBLIC_KEY=<your Stripe public key>
--STRIPE_REDIRECT_URL=<url address after stripe>
--STRIPE_SETTINGS_REDIRECT=<url address after changing settings>
--STRIPE_SUCCESS_URL=<url address after success payment>
--STRIPE_CANCEL_URL=<url address when cancel>
--AWS_ACCESS_KEY_ID=<your AWS access key ID>
--AWS_SECRET_ACCESS_KEY=<your AWS secret access key>
--AWS_REGION=<your AWS region>
--AWS_BUCKET=<your AWS S3 bucket name>
--AWS_API_VERSION=<your api version of AWS>
--FROM_EMAIL=<your AWS SES email address>
+- JWT_SECRET=<your JWT secret>
+- STRIPE_SECRET_KEY=<your Stripe secret key>
+- STRIPE_PUBLIC_KEY=<your Stripe public key>
+- STRIPE_REDIRECT_URL=<url address after stripe>
+- STRIPE_SETTINGS_REDIRECT=<url address after changing settings>
+- STRIPE_SUCCESS_URL=<url address after success payment>
+- STRIPE_CANCEL_URL=<url address when cancel>
+- AWS_ACCESS_KEY_ID=<your AWS access key ID>
+- AWS_SECRET_ACCESS_KEY=<your AWS secret access key>
+- AWS_REGION=<your AWS region>
+- AWS_BUCKET=<your AWS S3 bucket name>
+- AWS_API_VERSION=<your api version of AWS>
+- FROM_EMAIL=<your AWS SES email address>
 Start the development server:
 Copy code
 npm run dev
@@ -51,14 +51,14 @@ The server should be running on http://localhost:3000.
 Features
 This project includes the following features:
 
-User authentication (signup, login, logout)
-User authorization (role-based access control)
-Instructor dashboard (create, edit, and delete courses)
-Student dashboard (browse and enroll in courses)
-Course search and filtering
-Stripe integration for payment processing
-AWS SES for sending emails (e.g., course enrollment confirmation)
-AWS S3 for storing course materials (e.g., videos, documents)
+- User authentication (signup, login, logout)
+- User authorization (role-based access control)
+- Instructor dashboard (create, edit, and delete courses)
+- Student dashboard (browse and enroll in courses)
+- Course search and filtering
+- Stripe integration for payment processing
+- AWS SES for sending emails (e.g., course enrollment confirmation)
+- AWS S3 for storing course materials (e.g., videos, documents)
 
 
 
