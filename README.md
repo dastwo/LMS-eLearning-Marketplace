@@ -12,6 +12,7 @@ Full stack/MERN stack JavaScript
 - Stripe
 - AWS SES for emails
 - AWS S3 for storage
+
 Getting Started
 To get started with this project, follow these steps:
 
