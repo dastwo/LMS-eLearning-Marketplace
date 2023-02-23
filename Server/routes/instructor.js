@@ -1,5 +1,5 @@
 const express = require('express')
-const {makeInstructor, getAccountStatus, currentInstructor, instructorCourses} = require('../controllers/instructor')
+const {makeInstructor, getAccountStatus, currentInstructor, instructorCourses, studentCount, instructorBalance, instructorPayoutSetting} = require('../controllers/instructor')
 const {requireSignIn} = require('../middleware/index')
 const router = express.Router()
 
@@ -9,4 +9,8 @@ router.get('/current-instructor', requireSignIn, currentInstructor)
 router.get('/instructor-courses', requireSignIn, instructorCourses)
 
 
+router.post('/instructor/student-count', requireSignIn, studentCount)
+
+router.get('/instructor/balance', requireSignIn, instructorBalance)
+router.get('/instructor/payout-setting', requireSignIn, instructorPayoutSetting)
 module.exports = router

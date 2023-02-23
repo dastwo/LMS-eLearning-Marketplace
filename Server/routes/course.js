@@ -1,8 +1,8 @@
 const express = require('express')
 const formidableMiddleware = require('express-formidable');
 
-const {uploadImage, removeImage, createCourse, getCourse, uploadVideo, removeVideo, addLesson, updateCourse, removeLesson, updateLesson, publishCourse, unpublishCourse, coursesPublish, checkEnrollment, freeEnrollment, paidEnrollment, stripeSuccess} = require('../controllers/course')
-const {requireSignIn, isInstructor} = require('../middleware/index')
+const {uploadImage, removeImage, createCourse, getCourse, uploadVideo, removeVideo, addLesson, updateCourse, removeLesson, updateLesson, publishCourse, unpublishCourse, coursesPublish, checkEnrollment, freeEnrollment, paidEnrollment, stripeSuccess, userCourses, markCompleted, listCompleted, markIncomplete} = require('../controllers/course')
+const {requireSignIn, isInstructor, isEnrolled} = require('../middleware/index')
 const router = express.Router()
 
 
@@ -36,7 +36,17 @@ router.get('/check-enrollment/:courseId', requireSignIn, checkEnrollment)
 router.post('/free-enrollment/:courseId', requireSignIn, freeEnrollment)
 router.post('/paid-enrollment/:courseId', requireSignIn, paidEnrollment)
 
+
+// stripe
 router.get('/stripe-success/:courseId', requireSignIn, stripeSuccess)
 
+
+router.get('/user-courses', requireSignIn, userCourses)
+router.get('/user/course/:slug', requireSignIn, isEnrolled,  getCourse)
+
+
+router.post('/list-completed', requireSignIn, listCompleted)
+router.post('/mark-completed', requireSignIn, markCompleted)
+router.post('/mark-incomplete', requireSignIn, markIncomplete)
 
 module.exports = router

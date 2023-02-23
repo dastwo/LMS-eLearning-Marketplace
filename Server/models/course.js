@@ -15,7 +15,7 @@ const lesseesSchema = new mongoose.Schema({
         lowercase: true,
     },
     content:{
-        type:{},
+        type:String,
         minlength: 200,
     },
     video:{},

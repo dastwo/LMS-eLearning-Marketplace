@@ -77,4 +77,39 @@ const instructorCourses = async (req, res)=>{
     console.log(err);
   }
 }
-module.exports = { makeInstructor, getAccountStatus, currentInstructor, instructorCourses };
+
+const studentCount = async (req, res)=>{
+  try {
+    const users = await User.find({courses: req.body.courseId}).select('_id').exec()
+    return res.status(200).json(users)
+  } catch (err) {
+    return res.status(400)
+  }
+}
+
+const instructorBalance = async (req, res)=>{
+  try {
+    const user = await User.findById(req.auth.id).exec()
+
+    const balance = await stripe.balance.retrieve({
+      stripeAccount: user.stripe_account_id,
+    })
+    return res.json(balance)
+  } catch (err) {
+    return res.status(400)
+  }
+}
+
+const instructorPayoutSetting = async (req, res)=>{
+  try {
+    const user = await User.findById(req.auth.id).exec()
+
+    const loginLink = await stripe.account.createLoginLink(user.stripe_seller.id, {redirect_url: process.env.STRIPE_SETTINGS_REDIRECT})
+    return res.json(loginLink.url)
+
+  } catch (err) {
+    return res.status(400)
+  }
+}
+
+module.exports = { makeInstructor, getAccountStatus, currentInstructor, instructorCourses, studentCount, instructorBalance, instructorPayoutSetting };

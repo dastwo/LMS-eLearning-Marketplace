@@ -3,8 +3,20 @@ import axios from 'axios'
 import CourseCard from '../components/card/CourseCard';
 
 
-const index = ({courses}) => {
- 
+const index = () => {
+
+  const [courses, setCourses] = useState([])
+
+  useEffect(()=>{
+    loadCourses()
+  },[])
+
+  const loadCourses = async ()=>{
+    const {data} = await axios.get('/api/courses')
+    setCourses(data)
+  }
+
+
   return (
     <>
       <h1 className="text-center">Online Courses</h1>
@@ -22,10 +34,10 @@ const index = ({courses}) => {
   );
 };
 
-export async function getServerSideProps(){
-  const {data} = await axios.get(`${process.env.API}/courses`)
+// export async function getServerSideProps(){
+//   const {data} = await axios.get(`${process.env.API}/courses`)
   
-  return { props: {courses: data } }
-}
+//   return { props: {courses: data } }
+// }
 
 export default index;

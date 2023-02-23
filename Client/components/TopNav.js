@@ -32,7 +32,7 @@ const TopNav = () => {
     <Menu mode='horizontal' activeKey={[current]} selectedKeys={[current]}>
     <Item key='/' onClick={(e)=> setCurrent(e.key)} icon={<AppstoreOutlined />}>
         <Link href='/'>
-         home
+         Descodmy
         </Link>
     </Item>
     {user && user.role && user.role.includes('Instructor') ? <Item key='/instructor/course/create' onClick={(e)=> setCurrent(e.key)} icon={<CarryOutFilled /> }>

@@ -74,10 +74,9 @@ const logout = async (req, res) => {
 const currentUser = async (req, res) => {
   try {
     const user = await User.findById(req.auth.id).select("-password").exec();
-    console.log("CURRENT_USER", user);
+    
     return res.status(200).json({ ok: true });
   } catch (err) {
-    console.log(err);
     return res.status(500).json({ message: "fix the server currentUser" });
   }
 };
@@ -112,7 +111,6 @@ const sendTestEmail = async (req, res) => {
     const emailSent = await SES.sendEmail(params).promise();
     res.json({ ok: true });
   } catch (error) {
-    console.log("error send email", error);
     res.status(400).json("Try agin");
   }
 };
@@ -157,7 +155,6 @@ const forgetPassword = async (req, res) => {
     const emailSent = await SES.sendEmail(params).promise();
     res.json({ ok: true });
   } catch (err) {
-    console.log(err);
     return res.status(400).json("error forget Password");
   }
 };
@@ -173,7 +170,6 @@ const resetPassword = async (req, res) => {
     ).exec();
     return res.status(200).json({ ok: true });
   } catch (err) {
-    console.log("reset Password error", err);
     return res.status(500).json("error");
   }
 };
