@@ -43,6 +43,7 @@ MONGODB_URI=<your MongoDB URI>
 - AWS_BUCKET=<your AWS S3 bucket name>
 - AWS_API_VERSION=<your api version of AWS>
 - FROM_EMAIL=<your AWS SES email address>
+  
 Start the development server:
 Copy code
 npm run dev
