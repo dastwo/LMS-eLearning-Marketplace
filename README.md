@@ -29,7 +29,7 @@ Create a .env file in the root of the project and fill in the following variable
 
 makefile
 Copy code
-MONGODB_URI=<your MongoDB URI>
+- MONGODB_URI=<your MongoDB URI>
 - JWT_SECRET=<your JWT secret>
 - STRIPE_SECRET_KEY=<your Stripe secret key>
 - STRIPE_PUBLIC_KEY=<your Stripe public key>
