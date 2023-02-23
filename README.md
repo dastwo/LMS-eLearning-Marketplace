@@ -5,13 +5,13 @@ Technologies Used
 This project is built using the following technologies:
 
 Full stack/MERN stack JavaScript
-Next.js
-React
-Node.js
-MongoDB
-Stripe
-AWS SES for emails
-AWS S3 for storage
+- Next.js
+- React
+- Node.js
+- MongoDB
+- Stripe
+- AWS SES for emails
+- AWS S3 for storage
 Getting Started
 To get started with this project, follow these steps:
 
