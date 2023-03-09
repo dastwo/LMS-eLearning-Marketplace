@@ -1,15 +1,11 @@
 const mongoose = require('mongoose')
 mongoose.set('strictQuery', true);
  const connectDb = async () => {
-    try {
-      await mongoose.connect(process.env.DATABASE, {
+    mongoose.connect(process.env.DATABASE, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
-      })
-      console.log(`**database connect**`);
-    } catch (error) {
-      console.log(error.message)
-    }
+      }).then(()=>console.log(`**database connect**`)).catch((err)=>console.error('Not Connected'))
+    
   }
 
 module.exports = connectDb
